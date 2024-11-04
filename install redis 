@@ -1,0 +1,11 @@
+sudo apt-get update
+sudo apt-get install build-essential tcl
+
+curl -sO http://download.redis.io/redis-stable.tar.gz
+
+
+
+
+
+
+    adduser --system --group --no-create-home redis  && mkdir /var/lib/redis && chown redis:redis /var/lib/redis && chmod 770 /var/lib/redis

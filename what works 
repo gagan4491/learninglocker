@@ -1,0 +1,5 @@
+    fallocate -l 4GB /swapfile
+    chmod 600 /swapfile
+    mkswap /swapfile >> OUTPUT_LOG
+    swapon /swapfile
+    echo "/swapfile none swap sw 0 0" | tee -a /etc/fstab >> OUTPUT_LOG

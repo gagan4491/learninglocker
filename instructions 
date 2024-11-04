@@ -1,0 +1,138 @@
+sudo useradd -m alertdriving
+sudo chmod 755 /home/alertdriving
+
+
+
+################### Run at the last of installation.#############
+useradd -m nginx
+cat /etc/group|grep nginx
+cat /etc/passwd|grep nginx
+chsh -s /bin/false nginx
+cat /etc/passwd|grep nginx
+
+
+**********************the below step may not be required :
+**********************
+**********************sudo nano /etc/nginx/conf.d/learninglocker.conf
+**********************listen 80 default_server;  ----> listen 80;
+**********************
+**********************listen [::]:80 default_server; ---->listen [::]:80;
+
+
+
+
+#######################################################
+
+
+
+
+apt install git -y
+
+
+apt-get purge node*
+cd /tmp/
+wget https://nodejs.org/dist/v10.24.1/node-v10.24.1-linux-x64.tar.gz
+
+tar zxvf node-v10.24.1-linux-x64.tar.gz
+cp -r node-v10.24.1-linux-x64/{bin,include,lib,share} /usr/
+npm install -g pm2
+npm install -g yarn
+sudo apt-mark hold nodejs
+
+
+######### Debain 12
+wget https://nodejs.org/dist/v12.9.1/node-v12.9.1-linux-x64.tar.gz
+tar zxvf node-v12.9.1-linux-x64.tar.gz
+cp -r node-v12.9.1-linux-x64/{bin,include,lib,share} /usr/
+
+npm install -g pm2
+npm install -g yarn
+sudo apt-mark hold nodejs
+
+######
+
+sudo apt-mark hold nodejs
+
+
+Install mongo 4  in debian 11 or 12
+######
+sudo apt-get install -y gnupg2 -y
+
+wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+
+sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+sudo percona-release enable psmdb-40 release
+sudo apt update
+sudo apt install percona-server-mongodb -y
+sudo systemctl start mongod
+
+sudo systemctl restart mongod
+########
+
+
+ systemctl stop redis-server                #we can skip if we installing on fresh machine
+ rm -rf /var/lib/redis/*            #we can skip if we installing on fresh machine
+ cd /etc/           #we can skip if we installing on fresh machine
+ tar cf nginxBackup.tar nginx           #we can skip if we installing on fresh machine
+ service nginx stop         #we can skip if we installing on fresh machine
+ cd /root/          #we can skip if we installing on fresh machine
+ ####wget -qO deployll.sh http://lrnloc.kr/installv2 && bash deployll.sh
+ chmod a+x deployXX.sh
+
+ TYPE:  /opt/learninglocker/releases
+ TYPE:  /opt/learninglocker/current
+ PRESS n
+ PRESS y
+ TYPE:   alertdriving
+ PRESS y
+ PRESS n   (anti virus question)
+ press RETURN, to start installing software (it will take a few minutes -->  don't worry, it's not broken)
+ PRESS y   (NGINX question)
+ PRESS y   (Organization question)
+ TYPE:
+
+ TYPE:  admin@alert.dev
+ TYPE: Password1   (password question 1st time)
+ TYPE: Password1   (password question 2nd time)
+ PRESS y
+
+Software installed, then we  need to fix things:
+
+ cd /opt/learninglocker/
+ rm -f current
+ cd releases/
+ ls -la (see what is the last release ll-201907-xx...)
+ cd /opt/learninglocker/
+ ln -s /opt/learninglocker/releases/ll-201907... current  (the name of the directories should not end with '/')
+Example:  				ll-20190620-beae8a9bd65819e4695c5234d3f96b64fca5fed4 current
+
+ edit the 2 .env files based on the previous version (we need to compare and change the webapp/.env from the previous version and new one):
+ edit file:   /opt/learninglocker/current/webapp/.env
+ edit file:   /opt/learninglocker/current/xapi/.env
+
+
+ npm install -g pm2
+ sudo ln -s /usr/local/node-v10.24.1/bin/pm2 /usr/local/bin/pm2
+pm2 install pm2-logrotate
+
+ su - alertdriving
+
+
+su - alertdriving
+ pm2 stop all
+ rm -rf /home/alertdriving/.pm2
+ cd /opt/learninglocker/current/webapp
+ pm2 start all.json
+ cd /opt/learninglocker/current/xapi/
+ pm2 start xapi.json
+ pm2 save
+ pm2 status
+ exit (you will be ROOT, and not alertdriving user)
+ reboot (as ROOT)
+
+Run database migration script, assuming you are ROOT:
+
+ su - alertdriving
+ cd /opt/learninglocker/current/webapp
+ node cli/dist/server migrateMongo -i        (it will show the pending migrations)
+ node cli/dist/server migrateMongo -u

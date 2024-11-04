@@ -1,0 +1,73 @@
+
+ systemctl restart systemd-timesyncd
+ systemctl status systemd-timesyncd
+
+apt-get update
+apt-get install -y net-tools wget procps curl git python build-essential xvfb apt-transport-https unzip gettext-base socat
+
+wget -qO- https://deb.nodesource.com/setup_14.x | bash
+
+
+apt-get install -y nodejs
+node -v
+npm -v
+
+
+
+sudo useradd -m alertdriving
+sudo passwd alertdriving
+sudo chmod 755 /home/alertdriving
+su - alertdriving
+
+
+copy paste :
+
+rm -rf /var/lib/apt/lists/*
+npm install -g yarn
+
+
+
+/opt/learninglocker
+
+/opt/learninglocker/current
+root
+
+
+
+
+wget -qO- https://deb.nodesource.com/setup_10.x | bash
+
+
+apt-get install -y nodejs
+node -v
+npm -v
+
+cd /opt/learninglocker/current/webapp/
+node cli/dist/server createSiteAdmin "gagan@abc.com" "abc" "gagan4491"
+
+
+pm2 ls
+pm2 stop all
+cd /opt/learninglocker/current/webapp
+pm2 start all.json
+cd /opt/learninglocker/current/xapi/
+pm2 start xapi.json
+pm2 save
+pm2 status
+
+
+
+
+
+
+
+su - alertdriving
+pm2 startup
+su - root
+sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u <your-username> --hp /home/<your-username>
+
+su - alertdriving
+
+pm2 save
+
+
