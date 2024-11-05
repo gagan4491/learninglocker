@@ -1,0 +1,39 @@
+After changing the .env files # from another environment
+/opt/learninglocker/current/webapp/.env
+/opt/learninglocker/current/xapi/.env
+
+#########	Using root user:
+
+systemctl disable mongod.service 
+service mongod stop
+
+rm -f /etc/nginx/sites-enabled/*
+copy to:  /etc/nginx/nginx.conf	# from another environment
+
+mkdir /var/log/learninglocker/webapp
+mkdir /var/log/learninglocker/xapi
+mkdir /var/log/learninglocker/xapi_fs
+
+chown -R alertdriving:alertdriving /var/log/learninglocker/
+
+chsh -s /bin/bash alertdriving
+apt-get install nagios-plugins-contrib -y
+
+cd /root/		# I will provide the shell script.
+chmod a+x setup_node_exporter_1_8_2.sh 
+./setup_node_exporter_1_8_2.sh
+
+
+########################################
+#########	As AlertDriving user:
+#
+# Add to crontab
+########################################
+
+
+# LRS Clean up.
+00 3 1,15 * * find /opt/learninglocker/current/xapi/storage/accessLogs -iname "*.log" -mtime +30 -type f -delete > /dev/null 2>&1
+
+# Scale up xAPI and Worker on LRS
+@reboot /home/alertdriving/scaleUpLRS.sh	# from another environment
+
