@@ -476,15 +476,9 @@ function base_install ()
 
     # Update @google-cloud/pubsub version
     sed -i 's/"@google-cloud\/pubsub": "\^0.16.1"/"@google-cloud\/pubsub": "\^0.32.1"/' $PWD/package.json
-
+    sed -i 's/default_server//g' $PWD/nginx.conf.example
     # Update node-sass version
     sed -i 's/"node-sass": "\^4.5.0"/"node-sass": "\^4.14.0"/' $PWD/package.json
-
-    #updade bcrypt:
-    sed -i 's/"bcrypt": "\^2"/"bcrypt": "\^5"/' $PWD/package.json
-
-
-
    output "running sed  ...." true
 
     # yarn install

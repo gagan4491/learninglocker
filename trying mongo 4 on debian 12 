@@ -1,0 +1,83 @@
+sudo apt-get update
+sudo apt-get clean
+sudo apt-get autoremove
+
+
+
+sudo apt --fix-broken install
+sudo apt-get update && sudo apt-get upgrade
+sudo dpkg --configure -a
+sudo apt-get install -f
+sudo apt-get install -y gnupg2 -y
+
+wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+
+sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.23_amd64.deb
+
+wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add -
+
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list
+
+sudo apt-get update
+sudo apt-get install -f mongodb-org -y
+sudo systemctl enable mongod
+sudo systemctl restart mongod
+
+
+
+
+
+######
+sudo apt install redis-server -y
+
+
+######
+
+
+##we need to have python2 on debian 12 to run lrs:
+
+
+sudo apt update
+sudo apt install -y build-essential zlib1g-dev libssl-dev libreadline-dev libffi-dev wget
+wget https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz
+tar -xvf Python-2.7.18.tgz
+cd Python-2.7.18
+./configure --enable-optimizations
+make install
+python2 --version
+cd
+
+
+
+
+
+
+
+##############
+
+
+
+Fix Permissions for /var/run/mongod.pid
+
+
+sudo mkdir -p /var/run/mongodb
+
+
+sudo chown -R mongodb:mongodb /var/run/mongodb
+
+
+sudo chmod -R 755 /var/run/mongodb
+
+
+sudo nano /etc/mongod.conf
+
+
+processManagement:
+  pidFilePath: /var/run/mongodb/mongod.pid
+
+
+
+sudo systemctl restart mongod
+
+
+####################
