@@ -476,7 +476,6 @@ function base_install ()
 
     # Update @google-cloud/pubsub version
     sed -i 's/"@google-cloud\/pubsub": "\^0.16.1"/"@google-cloud\/pubsub": "\^0.32.1"/' $PWD/package.json
-    sed -i 's/default_server//g' $PWD/nginx.conf.example
     # Update node-sass version
     sed -i 's/"node-sass": "\^4.5.0"/"node-sass": "\^4.14.0"/' $PWD/package.json
    output "running sed  ...." true
@@ -834,8 +833,8 @@ function debian_nginx ()
     XAPI_ENV=${PWD}/${XAPI_SUBDIR}/.env
     BASE_ENV=${PWD}/${WEBAPP_SUBDIR}/.env
     # remove default config if it exists
-    if [[ -f /etc/nginx/conf.d/default.conf ]]; then
-        rm /etc/nginx/conf.d/default.conf
+    if [[ -f /etc/nginx/sites-available/default.conf ]]; then
+        rm /etc/nginx/sites-available/default.conf
     fi
     mv ${1}/nginx.conf.example $NGINX_CONFIG
 
@@ -1055,14 +1054,13 @@ function redhat_nginx ()
             return
         fi
     done
-
     output "installing nginx...."
     yum -y install nginx >> $OUTPUT_LOG 2>>$ERROR_LOG &
     print_spinner true
 
     # remove default config if it exists
-    if [[ -f /etc/nginx/conf.d/default.conf ]]; then
-        rm /etc/nginx/conf.d/default.conf
+    if [[ -f /etc/nginx/sites-available/default.conf ]]; then
+        rm /etc/nginx/sites-available/default.conf
     fi
 
     if [[ $OS_SUBVER == "Fedora" ]]; then
